@@ -27,7 +27,7 @@ contract Student {
     }
 
     struct StudentInfo {
-        bytes32 studentId;
+        string studentId;
         string firstName;
         string lastName;
         bool isPassed;
@@ -35,12 +35,12 @@ contract Student {
         Status status;
     }
 
-    mapping(bytes32 => StudentInfo) studentInfo;
+    mapping(string => StudentInfo) studentInfo;
 
     StudentInfo[] public students;
 
     function create(
-      bytes32 _studentId,
+      string memory _studentId,
       string memory _firstName,
       string memory _lastName,
       Course _course,
