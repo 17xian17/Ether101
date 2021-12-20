@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.4.22 <0.9.0;
+pragma solidity >=0.4.17 <0.9.0;
 
 contract Student {
     constructor() {}
@@ -27,6 +27,7 @@ contract Student {
     }
 
     struct StudentInfo {
+        uint id;
         string studentId;
         string firstName;
         string lastName;
@@ -36,7 +37,7 @@ contract Student {
         address sender;
     }
 
-    mapping(address => StudentInfo) studentInfo;
+    mapping(string => StudentInfo) studentInfo;
 
     StudentInfo[] public students;
 
@@ -55,8 +56,12 @@ contract Student {
       Course _course,
       Status _status
     ) public returns (string memory){
+      uint _id = students.length;
+      _id++;
+
       StudentInfo memory student;
 
+      student.id = _id;
       student.studentId = _studentId;
       student.firstName = _firstName;
       student.lastName = _lastName;
@@ -66,6 +71,8 @@ contract Student {
       student.sender = address(msg.sender);
 
       students.push(student);
+      // add to the mapping by  studentId
+      studentInfo[_studentId] = student;
 
       emit StudentEvent(
         _studentId,
@@ -79,16 +86,14 @@ contract Student {
     }
 
     function update(
-      uint _index,
       string memory _studentId,
       string memory _firstName,
       string memory _lastName,
       Course _course,
       Status _status
     ) public returns (string memory){
-      StudentInfo storage student = students[_index];
+      StudentInfo storage student = studentInfo[_studentId];
 
-      student.studentId = _studentId;
       student.firstName = _firstName;
       student.lastName = _lastName;
       student.isPassed = false;
@@ -102,10 +107,10 @@ contract Student {
     }
 
     function updateCourse(
-      uint _index,
+      string memory _studentId,
       Course _course
     ) public returns (string memory){
-      StudentInfo storage student = students[_index];
+      StudentInfo storage student = studentInfo[_studentId];
 
       student.course = _course;
       student.sender = address(msg.sender);
@@ -114,4 +119,29 @@ contract Student {
 
       return student.studentId;
     }
+
+    function getStudentInfoBy(string memory _studentId)
+      public
+      view
+      returns (
+        string memory studentId,
+        string memory firstName,
+        string memory lastName,
+        bool isPassed,
+        Course course,
+        Status status,
+        address sender
+      ) {
+        StudentInfo memory student = studentInfo[_studentId];
+
+        return (
+          student.studentId,
+          student.firstName,
+          student.lastName,
+          student.isPassed,
+          student.course,
+          student.status,
+          student.sender
+        );
+      }
 }
