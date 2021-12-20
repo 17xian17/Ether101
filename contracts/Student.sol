@@ -91,7 +91,8 @@ contract Student {
       string memory _lastName,
       Course _course,
       Status _status
-    ) public returns (string memory){
+    ) public 
+    returns (string memory){
       StudentInfo storage student = studentInfo[_studentId];
 
       student.firstName = _firstName;
@@ -103,13 +104,22 @@ contract Student {
 
       students.push(student);
 
+      emit StudentEvent(
+        _studentId,
+        _firstName,
+        _lastName,
+        _course,
+        _status
+      );
+
       return _studentId;
     }
 
     function updateCourse(
       string memory _studentId,
       Course _course
-    ) public returns (string memory){
+    ) public 
+    returns (string memory){
       StudentInfo storage student = studentInfo[_studentId];
 
       student.course = _course;
@@ -120,9 +130,8 @@ contract Student {
       return student.studentId;
     }
 
-    function getStudentInfoBy(string memory _studentId)
-      public
-      view
+    function getStudentInfoByStudentId(string memory _studentId)
+      public view
       returns (
         string memory studentId,
         string memory firstName,
@@ -133,7 +142,6 @@ contract Student {
         address sender
       ) {
         StudentInfo memory student = studentInfo[_studentId];
-
         return (
           student.studentId,
           student.firstName,
@@ -144,4 +152,15 @@ contract Student {
           student.sender
         );
       }
+
+      function getStudentReturnStruct(string memory _studentId)
+        public view 
+        returns (StudentInfo memory) {
+          StudentInfo memory student = studentInfo[_studentId];
+          return (student);
+      }
+
+      function allStudents() public view returns(StudentInfo[] memory) {
+        return students;
+    }
 }
