@@ -156,11 +156,12 @@ contract Student {
       function getStudentReturnStruct(string memory _studentId)
         public view 
         returns (StudentInfo memory) {
-          StudentInfo memory student = studentInfo[_studentId];
-          return (student);
+          return studentInfo[_studentId];
       }
 
-      function allStudents() public view returns(StudentInfo[] memory) {
+      function allStudents() 
+      public view 
+      returns(StudentInfo[] memory) {
         return students;
     }
 }
