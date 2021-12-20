@@ -160,8 +160,7 @@ contract Student {
       }
 
       function allStudents() 
-      public view 
-      returns(StudentInfo[] memory) {
+      public view returns(StudentInfo[] memory) {
         return students;
     }
 }
